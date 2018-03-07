@@ -1,17 +1,33 @@
 /* 
  * 
- * Google Analytics automatisch event/goal tracking
+ * Google Analytics event/goal tracking for gtag.js
  *
- * @version v1.0.0
+ * @version v1.1.0
  *
  */
 $(function () {
 
-    /* Mailto/tel events
+    /*
+    * 
+    * Mailto/tel events
+    *
+    * Category: 
+    *     Bellen
+    *     Mailen
+    * 
+    * Action:
+    *     $href
+    * 
+    * Label:
+    *     n/a
+    * 
+    * Value:
+    *     n/a
     * =====================*/
-    $("[href*='tel:'], [href*='mailto:']").click(function(e) {
-      
+    $(document).on("click", "[href*='tel:'], [href*='mailto:']", function(e) { 
+
       var href = $(this).attr('href');
+      var target  = $(this).attr('target');
 
       if (href.toLowerCase().indexOf("tel") >= 0) {
         var eventCategory = 'Bellen';
@@ -22,50 +38,108 @@ $(function () {
         var eventAction = href.slice(7);
       }
 
-      ga('send', 'event', eventCategory, eventAction);
+      gtag('event', 'event_name', {
+        'event_category': eventCategory,
+        'event_action': eventAction
+      });
 
-      e.preventDefault();
-      setTimeout(function(){
-        window.location = href;
-      }, 500);
+      // Add delay if opening in same window so event is actually sent
+      if (target != '_blank') {
+        e.preventDefault();
+        setTimeout(function() {
+          window.location = href;
+        }, 500);
+      }
+
     });
 
-    /* External links
+    /*
+    * 
+    * External links
+    *
+    * Category: 
+    *     External
+    * 
+    * Action:
+    *     $href
+    * 
+    * Label:
+    *     $value
+    * 
+    * Value:
+    *     n/a
     * =====================*/
-    $("a[href]").click(function(e) {
+    $(document).on("click", "a[href]", function(e) {  
 
         var hostname = new RegExp(location.host);
         var href = $(this).attr('href');
+        var target  = $(this).attr('target');
 
         var eventCategory = 'External';
         var eventAction = href;
         var eventLabel = $(this).text();
 
         if (href.slice(0, 4) == "http" && !hostname.test(href)) {
-          ga('send', 'event', eventCategory, eventAction, eventLabel);
+          gtag('event', 'event_name', {
+            'event_category': eventCategory,
+            'event_action': eventAction,
+            'event_label': eventLabel
+          });
+
+          // Add delay if opening in same window so event is actually sent
+          if (target != '_blank') {
+            e.preventDefault();
+            setTimeout(function() {
+              window.location = href;
+            }, 500);
+          }
+
         }
-        
+      
     });
 
-    /* PDF/Doc downloads
+    /*
+    * 
+    * .pdf / .docx downloads
+    *
+    * Category: 
+    *     Download PDF
+    *     Download docx
+    * 
+    * Action:
+    *     $href
+    * 
+    * Label:
+    *     n/a
+    * 
+    * Value:
+    *     n/a
     * =====================*/
-    $("[href*='.pdf'], [href*='.docx']").click(function(e) {
+    $(document).on("click", "[href*='.pdf'], [href*='.docx']", function(e) { 
       
       var href = $(this).attr('href');
+      var target  = $(this).attr('target');
       var eventCategory = 'Download PDF';
-      var eventAction = 'Download';
-      var eventLabel = href;
+      var eventAction = href;
 
       if (href.toLowerCase().indexOf(".docx") >= 0) {
         var eventCategory = 'Download docx';
       }
 
-      ga('send', 'event', eventCategory, eventAction, eventLabel);
+      gtag('event', 'event_name', {
+        'event_category': eventCategory,
+        'event_action': eventAction
+      });
 
-      e.preventDefault();
-      setTimeout(function(){
-        window.location = href;
-      }, 500);
+
+      // Add delay if opening in same window so event is actually sent
+      if (target != '_blank') {
+        e.preventDefault();
+        setTimeout(function() {
+          window.location = href;
+        }, 500);
+      }
+
     });
 
 });
