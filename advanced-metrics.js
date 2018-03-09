@@ -2,10 +2,10 @@
  * 
  * Google Analytics event/goal tracking for gtag.js
  *
- * @version v1.1.0
+ * @version v1.1.1
  *
  */
-$(function () {
+(function($) {
 
     /*
     * 
@@ -142,4 +142,4 @@ $(function () {
 
     });
 
-});
+}(jQuery));
