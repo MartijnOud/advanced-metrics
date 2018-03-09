@@ -1,5 +1,7 @@
 /* 
  * 
+ * Advanced Metrics
+ *
  * Google Analytics event/goal tracking for gtag.js
  *
  * @version v1.1.1
