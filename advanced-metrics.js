@@ -2,12 +2,27 @@
  * 
  * Advanced Metrics
  *
- * Google Analytics event/goal tracking for gtag.js
+ * Google Analytics event/goal tracking
+ * Supports gtag() and ga()
  *
- * @version v1.1.1
+ * @version v1.2.0
  *
  */
 (function($) {
+
+    function checkAnalyticsVersion() {
+      analytics_version = 0;
+      if (window.gtag) {
+        analytics_version = 1;
+      } else if (window.ga && ga.loaded) {
+        analytics_version = 2;
+      } else if (window._gaq && window._gaq._getTracker) {
+        analytics_version = 3;
+      }
+      return analytics_version;
+    }
+
+    checkAnalyticsVersion();
 
     /*
     * 
@@ -39,11 +54,14 @@
         var eventCategory = 'Mailen';
         var eventAction = href.slice(7);
       }
-
-      gtag('event', 'event_name', {
-        'event_category': eventCategory,
-        'event_action': eventAction
-      });
+      
+      if (analytics_version == 2) {
+        ga('send', 'event', eventCategory, eventAction);
+      } else {
+        gtag('event', eventAction, {
+          'event_category': eventCategory
+        });
+      }
 
       // Add delay if opening in same window so event is actually sent
       if (target != '_blank') {
@@ -82,11 +100,14 @@
         var eventLabel = $(this).text();
 
         if (href.slice(0, 4) == "http" && !hostname.test(href)) {
-          gtag('event', 'event_name', {
-            'event_category': eventCategory,
-            'event_action': eventAction,
-            'event_label': eventLabel
-          });
+
+          if (analytics_version == 2) {
+            ga('send', 'event', eventCategory, eventAction);
+          } else {
+            gtag('event', eventAction, {
+              'event_category': eventCategory
+            });
+          }
 
           // Add delay if opening in same window so event is actually sent
           if (target != '_blank') {
@@ -128,11 +149,13 @@
         var eventCategory = 'Download docx';
       }
 
-      gtag('event', 'event_name', {
-        'event_category': eventCategory,
-        'event_action': eventAction
-      });
-
+      if (analytics_version == 2) {
+        ga('send', 'event', eventCategory, eventAction);
+      } else {
+        gtag('event', eventAction, {
+          'event_category': eventCategory
+        });
+      }
 
       // Add delay if opening in same window so event is actually sent
       if (target != '_blank') {
