@@ -1,5 +1,5 @@
 # Advanced Metrics
-This is a small jQuery plugin that will allow you to automatically collect event data and send it to Google Analytics.
+This is a small jQuery addon that will allow you to automatically collect event data and send it to Google Analytics.
 
 ## Features
 * Tracks all clicks on `mailto:` links
@@ -10,6 +10,6 @@ This is a small jQuery plugin that will allow you to automatically collect event
 
 ## Requirements
 * Requires jQuery
-* Requires Google Analytics global site tag (gtag.js)
+* Requires Google Analytics global site tag (gtag.js) or Analytics for Web (analytics.js)
 
 This sends _event_ data to Google Analytics. You can choose to create this as goals/conversions. Learn how on my article about [tracking mailto: and tel: links](https://martijnoud.com/tracking-mailto-tel-google-analytics/).
