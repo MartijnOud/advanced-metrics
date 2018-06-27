@@ -11,18 +11,16 @@
 (function($) {
 
     function checkAnalyticsVersion() {
-      analytics_version = 0;
+      var analytics_version = 0;
       if (window.gtag) {
-        analytics_version = 1;
+        var analytics_version = 1;
       } else if (window.ga && ga.loaded) {
-        analytics_version = 2;
+        var analytics_version = 2;
       } else if (window._gaq && window._gaq._getTracker) {
-        analytics_version = 3;
+        var analytics_version = 3;
       }
       return analytics_version;
     }
-
-    checkAnalyticsVersion();
 
     /*
     * 
@@ -41,7 +39,9 @@
     * Value:
     *     n/a
     * =====================*/
-    $(document).on("click", "[href*='tel:'], [href*='mailto:']", function(e) { 
+    $(document).on("click", "[href*='tel:'], [href*='mailto:']", function(e) {
+
+      var analytics_version = checkAnalyticsVersion();
 
       var href = $(this).attr('href');
       var target  = $(this).attr('target');
@@ -89,7 +89,9 @@
     * Value:
     *     n/a
     * =====================*/
-    $(document).on("click", "a[href]", function(e) {  
+    $(document).on("click", "a[href]", function(e) {
+
+        var analytics_version = checkAnalyticsVersion();
 
         var hostname = new RegExp(location.host);
         var href = $(this).attr('href');
@@ -138,7 +140,9 @@
     * Value:
     *     n/a
     * =====================*/
-    $(document).on("click", "[href*='.pdf'], [href*='.docx']", function(e) { 
+    $(document).on("click", "[href*='.pdf'], [href*='.docx']", function(e) {
+
+      var analytics_version = checkAnalyticsVersion();
       
       var href = $(this).attr('href');
       var target  = $(this).attr('target');
