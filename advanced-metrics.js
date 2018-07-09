@@ -5,20 +5,31 @@
  * Google Analytics event/goal tracking
  * Supports gtag() and ga()
  *
- * @version v1.2.0
+ * @version v1.3.0
  *
  */
 (function($) {
 
     function checkAnalyticsVersion() {
-      var analytics_version = 0;
+
+      analyticsVersionCounter++;
+      analytics_version = 0;
+
       if (window.gtag) {
-        var analytics_version = 1;
+        analytics_version = 1;
       } else if (window.ga && ga.loaded) {
-        var analytics_version = 2;
+        analytics_version = 2;
       } else if (window._gaq && window._gaq._getTracker) {
-        var analytics_version = 3;
+        analytics_version = 3;
       }
+
+      if (analytics_version > 0) {
+        clearInterval(intervalAnalyticsVersion);
+      }
+      if (analyticsVersionCounter > 10) {
+        clearInterval(intervalAnalyticsVersion);
+      }
+
       return analytics_version;
     }
 
@@ -41,8 +52,6 @@
     * =====================*/
     $(document).on("click", "[href*='tel:'], [href*='mailto:']", function(e) {
 
-      var analytics_version = checkAnalyticsVersion();
-
       var href = $(this).attr('href');
       var target  = $(this).attr('target');
 
@@ -55,6 +64,7 @@
         var eventAction = href.slice(7);
       }
       
+      if (analytics_version == null) { analytics_version = checkAnalyticsVersion(); }
       if (analytics_version == 2) {
         ga('send', 'event', eventCategory, eventAction);
       } else {
@@ -91,8 +101,6 @@
     * =====================*/
     $(document).on("click", "a[href]", function(e) {
 
-        var analytics_version = checkAnalyticsVersion();
-
         var hostname = new RegExp(location.host);
         var href = $(this).attr('href');
         var target  = $(this).attr('target');
@@ -103,6 +111,7 @@
 
         if (href.slice(0, 4) == "http" && !hostname.test(href)) {
 
+          if (analytics_version == null) { analytics_version = checkAnalyticsVersion(); }
           if (analytics_version == 2) {
             ga('send', 'event', eventCategory, eventAction);
           } else {
@@ -141,9 +150,7 @@
     *     n/a
     * =====================*/
     $(document).on("click", "[href*='.pdf'], [href*='.docx']", function(e) {
-
-      var analytics_version = checkAnalyticsVersion();
-      
+     
       var href = $(this).attr('href');
       var target  = $(this).attr('target');
       var eventCategory = 'Download PDF';
@@ -153,6 +160,7 @@
         var eventCategory = 'Download docx';
       }
 
+      if (analytics_version == null) { analytics_version = checkAnalyticsVersion(); }
       if (analytics_version == 2) {
         ga('send', 'event', eventCategory, eventAction);
       } else {
@@ -170,5 +178,8 @@
       }
 
     });
+    
+    var analyticsVersionCounter = 0;
+    var intervalAnalyticsVersion = setInterval(checkAnalyticsVersion, 500);
 
 }(jQuery));
