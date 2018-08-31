@@ -5,28 +5,28 @@
  * Google Analytics event/goal tracking
  * Supports gtag() and ga()
  *
- * @version v1.3.0
+ * @version v1.3.1
  *
  */
 (function($) {
 
+    var analytics_version;
     function checkAnalyticsVersion() {
 
       analyticsVersionCounter++;
-      analytics_version = 0;
 
       if (window.gtag) {
-        analytics_version = 1;
+        var analytics_version = 1;
       } else if (window.ga && ga.loaded) {
-        analytics_version = 2;
+        var analytics_version = 2;
       } else if (window._gaq && window._gaq._getTracker) {
-        analytics_version = 3;
+        var analytics_version = 3;
       }
 
       if (analytics_version > 0) {
         clearInterval(intervalAnalyticsVersion);
       }
-      if (analyticsVersionCounter > 10) {
+      if (analyticsVersionCounter >= 5) {
         clearInterval(intervalAnalyticsVersion);
       }
 
@@ -64,7 +64,7 @@
         var eventAction = href.slice(7);
       }
       
-      if (analytics_version == null) { analytics_version = checkAnalyticsVersion(); }
+      if (analytics_version == null) { var analytics_version = checkAnalyticsVersion(); }
       if (analytics_version == 2) {
         ga('send', 'event', eventCategory, eventAction);
       } else {
@@ -111,7 +111,7 @@
 
         if (href.slice(0, 4) == "http" && !hostname.test(href)) {
 
-          if (analytics_version == null) { analytics_version = checkAnalyticsVersion(); }
+          if (analytics_version == null) { var analytics_version = checkAnalyticsVersion(); }
           if (analytics_version == 2) {
             ga('send', 'event', eventCategory, eventAction);
           } else {
@@ -138,6 +138,7 @@
     *
     * Category: 
     *     Download PDF
+    *     Download doc
     *     Download docx
     * 
     * Action:
@@ -149,7 +150,7 @@
     * Value:
     *     n/a
     * =====================*/
-    $(document).on("click", "[href*='.pdf'], [href*='.docx']", function(e) {
+    $(document).on("click", "[href*='.pdf'], [href*='.docx'], [href*='.doc']", function(e) {
      
       var href = $(this).attr('href');
       var target  = $(this).attr('target');
@@ -160,7 +161,11 @@
         var eventCategory = 'Download docx';
       }
 
-      if (analytics_version == null) { analytics_version = checkAnalyticsVersion(); }
+      if (href.toLowerCase().indexOf(".doc") >= 0) {
+        var eventCategory = 'Download doc';
+      }
+
+      if (analytics_version == null) { var analytics_version = checkAnalyticsVersion(); }
       if (analytics_version == 2) {
         ga('send', 'event', eventCategory, eventAction);
       } else {

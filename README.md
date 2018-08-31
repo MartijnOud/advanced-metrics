@@ -7,6 +7,7 @@ This is a small jQuery addon that will allow you to automatically collect event 
 * Tracks all external links clicks
 * Tracks `.pdf` downloads
 * Tracks `.docx` downloads
+* Tracks `.doc` downloads
 
 ## Requirements
 * Requires jQuery
