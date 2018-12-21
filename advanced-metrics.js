@@ -5,10 +5,19 @@
  * Google Analytics event/goal tracking
  * Supports gtag() and ga()
  *
- * @version v1.3.1
+ * @version v1.4.0
  *
  */
-(function($) {
+
+if (!window.jQuery) {
+   var script = document.createElement('script');
+   script.type = "text/javascript";
+   script.src = "https://code.jquery.com/jquery-3.3.1.min.js";
+   document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+window.onload = function() {
+  $(function() {
 
     var analytics_version;
     function checkAnalyticsVersion() {
@@ -186,5 +195,6 @@
     
     var analyticsVersionCounter = 0;
     var intervalAnalyticsVersion = setInterval(checkAnalyticsVersion, 500);
-
-}(jQuery));
+    
+  })
+}
